@@ -1,12 +1,55 @@
-import React from 'react'
+import React, { useState, useEffect, useRef } from 'react'
 import {fabric} from 'fabric';
 
-const canvas = new fabric.Canvas('c', {
+/*const canvas = new fabric.Canvas('c', {
     height: 800,
     width: 800,
-  });
+  });*/
+
+let canvas;
+
+const getCanvas = () => {
+    console.log('getCanvas called!')
+    return new fabric.Canvas('react-canvas', {
+        height: 800,
+        width: window.innerWidth,
+    });
+}
 
 export default function Draw() {
+    const [lineWidth, setLineWidth] = useState(3);
+    const [lineColor, setLineColor] = useState('#000000');
+    const [shadowColor, setShadowColor] = useState('#000000')
+    const [shadowOffset, setShadowOffset] = useState(0);
+    const [shadowWidth, setShadowWidth] = useState(0);
+    const canvasEl = useRef();
+
+    console.log({ canvasEl });
+
+    useEffect(() => {
+        const onResize = () => {
+            console.log('Resize happened');
+            canvasEl.current.setAttribute('width', window.innerWidth /3)
+            canvasEl.current.setAttribute('height', 800)
+        };
+
+        // On resize
+        window.addEventListener('resize', onResize);
+
+        // On unmoun, remove resize event
+        return () => {
+            window.removeEventListener('resize', onResize)
+        };
+    }, []);
+
+    useEffect(() => {
+        console.log({ canvasEl })
+
+        if (canvasEl.current && !canvas) {
+            canvas = getCanvas();
+        }
+    }, [canvasEl])
+
     return (
         <div>
             <button onClick={addRect}>Add Circle</button>
@@ -14,7 +57,7 @@ export default function Draw() {
             <button onClick={clearCanvas}>Clear Canvas</button>
 
         <div id="drawing-mode-options">
-            <label for="drawing-mode-selector">Mode:</label>
+            <label htmlFor="drawing-mode-selector">Mode:</label>
             <select id="drawing-mode-selector">
                 <option>Pencil</option>
                 <option>Circle</option>
@@ -28,24 +71,25 @@ export default function Draw() {
             </select>
             <br />
             <label for="drawing-line-width">Line width:</label>
-            <span class="info">30</span>
-            <input type="range" value="30" min="0" max="150" id="drawing-line-width" />
+            <span className="info">{lineWidth}</span>
+            <input type="range" value={lineWidth} onChange={event => setLineWidth(event.target.value)} min="0" max="150" id="drawing-line-width" />
             <br />
             <label for="drawing-color">Line color:</label>
-            <input type="color" value="#005E7A" id="drawing-color" />
+            <input type="color" value={lineColor} onChange={event => setLineColor(event.target.value)} id="drawing-color" />
             <br />
             <label for="drawing-shadow-color">Shadow color:</label>
-            <input type="color" value="#005E7A" id="drawing-shadow-color" />
+            <input type="color" value={shadowColor} onChange={event => setShadowColor(event.target.value)} id="drawing-shadow-color" />
             <br />
             <label for="drawing-shadow-width">Shadow width:</label>
-            <span class="info">0</span>
-            <input type="range" value="0" min="0" max="50" id="drawing-shadow-width" />
+            <span className="info">{shadowWidth}</span>
+            <input type="range" value={shadowWidth} onChange={event => setShadowWidth(event.target.value)} min="0" max="50" id="drawing-shadow-width" />
             <br />
             <label for="drawing-shadow-offset">Shadow offset:</label>
-            <span class="info">0</span>
-            <input type="range" value="0" min="0" max="50" id="drawing-shadow-offset" />
+            <span className="info">{shadowOffset}</span>
+            <input type="range" value={shadowOffset} onChange={event => setShadowOffset(event.target.value)} min="0" max="50" id="drawing-shadow-offset" />
             <br />
             </div>
+            <canvas ref={canvasEl} id="react-canvas"></canvas>
         </div>
     )
 }
@@ -79,8 +123,7 @@ function drawTool() {
         drawingShadowColorEl,
         drawingLineWidthEl,
         drawingShadowWidth,
-        drawingShadowOffset,
-        clearEl;
+        drawingShadowOffset;
   
     drawingModeEl.onclick = function() {
       canvas.isDrawingMode = !canvas.isDrawingMode;
