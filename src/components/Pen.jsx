@@ -1,86 +1,20 @@
-import React from 'react'
-import {fabric} from 'fabric';
-
-const canvas = new fabric.Canvas('c', {
-    height: 800,
-    width: 800,
-  });
-
-export default function Draw() {
-    return (
-        <div>
-            <button onClick={addRect}>Add Circle</button>
-            <button onClick={drawTool}>Draw</button>
-            <button onClick={clearCanvas}>Clear Canvas</button>
-
-        <div id="drawing-mode-options">
-            <label for="drawing-mode-selector">Mode:</label>
-            <select id="drawing-mode-selector">
-                <option>Pencil</option>
-                <option>Circle</option>
-                <option>Spray</option>
-                <option>Pattern</option>
-                <option>hline</option>
-                <option>vline</option>
-                <option>square</option>
-                <option>diamond</option>
-                <option>texture</option>
-            </select>
-            <br />
-            <label for="drawing-line-width">Line width:</label>
-            <span class="info">30</span>
-            <input type="range" value="30" min="0" max="150" id="drawing-line-width" />
-            <br />
-            <label for="drawing-color">Line color:</label>
-            <input type="color" value="#005E7A" id="drawing-color" />
-            <br />
-            <label for="drawing-shadow-color">Shadow color:</label>
-            <input type="color" value="#005E7A" id="drawing-shadow-color" />
-            <br />
-            <label for="drawing-shadow-width">Shadow width:</label>
-            <span class="info">0</span>
-            <input type="range" value="0" min="0" max="50" id="drawing-shadow-width" />
-            <br />
-            <label for="drawing-shadow-offset">Shadow offset:</label>
-            <span class="info">0</span>
-            <input type="range" value="0" min="0" max="50" id="drawing-shadow-offset" />
-            <br />
-            </div>
-        </div>
-    )
-}
-
-function toolHandler() {}
-
-function clearCanvas() {
-    canvas.clear();
-}
-
-
-function addRect() {
-    var rect = new fabric.Rect({
-        left: 100,
-        top: 100,
-        fill: 'blue',
-        width: 20,
-        height: 20,
-        hasControls: true  
-      });   
-      canvas.add(rect);
-}
-
-
-function drawTool() {
+function() {
+    var $ = function(id){return document.getElementById(id)};
+  
+    var canvas = this.__canvas = new fabric.Canvas('c', {isDrawingMode: true});
+  
     fabric.Object.prototype.transparentCorners = false;
   
-    var drawingModeEl,
-        drawingOptionsEl,
-        drawingColorEl,
-        drawingShadowColorEl,
-        drawingLineWidthEl,
-        drawingShadowWidth,
-        drawingShadowOffset,
-        clearEl;
+    var drawingModeEl = $('drawing-mode'),
+        drawingOptionsEl = $('drawing-mode-options'),
+        drawingColorEl = $('drawing-color'),
+        drawingShadowColorEl = $('drawing-shadow-color'),
+        drawingLineWidthEl = $('drawing-line-width'),
+        drawingShadowWidth = $('drawing-shadow-width'),
+        drawingShadowOffset = $('drawing-shadow-offset'),
+        clearEl = $('clear-canvas');
+  
+    clearEl.onclick = function() { canvas.clear() };
   
     drawingModeEl.onclick = function() {
       canvas.isDrawingMode = !canvas.isDrawingMode;
@@ -176,7 +110,7 @@ function drawTool() {
       texturePatternBrush.source = img;
     }
   
-    ('drawing-mode-selector').onchange = function() {
+    $('drawing-mode-selector').onchange = function() {
   
       if (this.value === 'hline') {
         canvas.freeDrawingBrush = vLinePatternBrush;
@@ -250,6 +184,4 @@ function drawTool() {
         color: drawingShadowColorEl.value,
       });
     }
-}
-
-
+  })();
