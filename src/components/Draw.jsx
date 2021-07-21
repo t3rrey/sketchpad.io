@@ -1,17 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
 
-/*const canvas = new fabric.Canvas('c', {
-    height: 800,
-    width: 800,
-  });*/
-
 let canvas;
 
 const getDimensions = () => ({
   height: 800,
   width: window.innerWidth / 1.5,
 });
+
 const getCanvas = () => {
   console.log("getCanvas called!");
   return new fabric.Canvas("react-canvas", getDimensions());
@@ -33,7 +29,7 @@ export default function Draw() {
   const [shadowOffset, setShadowOffset] = useState(0);
   const [shadowWidth, setShadowWidth] = useState(0);
   const [drawingMode, setDrawingMode] = useState(false);
-
+  
   const canvasEl = useRef();
 
   const config = {
@@ -44,23 +40,18 @@ export default function Draw() {
     shadowWidth,
   };
 
-  console.log({ canvasEl });
+  // console.log({ canvasEl });
 
   useEffect(() => {
     const onResize = () => {
-      console.log("Resize happened");
-      // canvasEl.current.setAttribute('width', window.innerWidth / 3)
-      // canvasEl.current.setAttribute('height', 800)
+     // console.log("Resize happened");
       canvas.setDimensions(getDimensions());
     };
-
     // On resize
     window.addEventListener("resize", onResize);
-
-    // On unmoun, remove resize event
+    // On unmount, remove resize event
     return () => {
       window.removeEventListener("resize", onResize);
-      // document.querySelector('.canvas-container').remove();
     };
   }, []);
 
@@ -83,7 +74,7 @@ export default function Draw() {
 
   return (
     <div>
-      <button onClick={addRect}>Add Circle</button>
+      <button onClick={addRect}>Add Rectangle</button>
       <button onClick={() => setDrawingMode(!drawingMode)}>
         {drawingMode ? "Cancel drawing mode" : "Enter drawing mode"}
       </button>
@@ -162,7 +153,6 @@ export default function Draw() {
   );
 }
 
-function toolHandler() {}
 
 function clearCanvas() {
   canvas.clear();
@@ -183,26 +173,13 @@ function addRect() {
 function drawTool(config) {
   fabric.Object.prototype.transparentCorners = false;
 
-  var drawingModeEl = document.getElementById("draw-btn"),
-    drawingOptionsEl = document.getElementById("drawing-mode-options"),
-    drawingColorEl = config.lineColor,
+  var drawingColorEl = config.lineColor,
     drawingShadowColorEl = config.shadowColor,
     drawingLineWidthEl = config.lineWidth,
     drawingShadowWidth = config.shadowWidth,
     drawingShadowOffset = config.shadowOffset;
 
   
-  /*drawingModeEl.onclick = function () {
-    canvas.isDrawingMode = !canvas.isDrawingMode;
-    if (canvas.isDrawingMode) {
-      drawingModeEl.innerHTML = "Cancel drawing mode";
-      drawingOptionsEl.style.display = "";
-    } else {
-      drawingModeEl.innerHTML = "Enter drawing mode";
-      drawingOptionsEl.style.display = "none";
-    }
-  };*/
-
   if (fabric.PatternBrush) {
     var vLinePatternBrush = new fabric.PatternBrush(canvas);
     vLinePatternBrush.getPatternSrc = function () {
