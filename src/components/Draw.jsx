@@ -33,17 +33,6 @@ const setWidth = (width) => {
   }
 };
 
-const shadowColor = (color) => {
-  const brush = canvas.freeDrawingBrush;
-  brush.shadow = new fabric.Shadow({
-    blur: 5,
-    offsetX: 0,
-    offsetY: 0,
-    affectStroke: true,
-    color: color,
-  });
-};
-
 export default function Draw() {
   const [lineWidth, setLineWidth] = useState(10);
   const [lineColor, setLineColor] = useState("#000000");
@@ -127,6 +116,7 @@ export default function Draw() {
   return (
     <div>
       <button onClick={addRect}>Add Rectangle</button>
+      <button onClick={drawTriangleShape}>Add Triangle</button>
       <button onClick={() => setDrawingMode(!drawingMode)}>
         {drawingMode ? "Cancel drawing mode" : "Enter drawing mode"}
       </button>
@@ -213,7 +203,7 @@ function clearCanvas() {
 }
 
 function addRect() {
-  let rect = new fabric.Rect({
+  let newRectangle = new fabric.Rect({
     left: 100,
     top: 100,
     fill: "blue",
@@ -221,7 +211,21 @@ function addRect() {
     height: 20,
     hasControls: true,
   });
-  canvas.add(rect);
+  canvas.add(newRectangle);
+  canvas.centerObject(newRectangle);
+}
+
+function drawTriangleShape() {
+  let newTriangle = new fabric.Triangle({
+    left: 100,
+    top: 100,
+    width: 100,
+    height: 100,
+    fill: "red",
+    hasControls: true,
+  });
+  canvas.add(newTriangle);
+  canvas.centerObject(newTriangle);
 }
 
 
