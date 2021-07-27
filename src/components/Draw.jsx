@@ -85,7 +85,7 @@ export default function Draw() {
   }, []);
 
   useEffect(() => {
-    console.log({ canvasEl });
+    //console.log({ canvasEl });
 
     if (canvasEl.current && !canvas) {
       canvas = getCanvas();
