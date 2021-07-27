@@ -1,8 +1,12 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import setCanvasBrush from "../helpers/setCanvasBrush";
-import square from '../img/square.png';
-import triangle from '../img/triangle.png'
+import circleBtn from '../img/circleButton.svg';
+import squareBtn from '../img/squareButton.svg';
+import triangleBtn from '../img/triangleButton.svg';
+import clearBtn from '../img/clearButton.svg';
+import drawToolBtn from '../img/drawToolButton.svg';
+
 
 let canvas;
 
@@ -116,13 +120,12 @@ export default function Draw() {
   };
 
   return (
-    <div>
-      <button className='tool-btn' onClick={addRect}><img src={square} alt='rectangleTool' width='30' height='30' /></button>
-      <button className='tool-btn' onClick={drawTriangleShape}><img src={triangle} width='30' height='30' /></button>
-      <button className='tool-btn' onClick={() => setDrawingMode(!drawingMode)}>
-        {drawingMode ? "Cancel drawing mode" : "Enter drawing mode"}
-      </button>
-      <button className='tool-btn' onClick={clearCanvas}>Clear Canvas</button>
+    <div className='mainContent'>
+      <img className='tool-btn' onClick={() => setDrawingMode(!drawingMode)} src={drawToolBtn} alt="" width='40'/>
+      <img className='tool-btn' onClick={addRect} src={squareBtn} alt='rectangleTool' width='40' />
+      <img className='tool-btn' onClick={drawTriangleShape} src={triangleBtn} width='40' />
+      <img className='tool-btn' src={circleBtn} alt="" width='40'/>
+      <img className='tool-btn' onClick={clearCanvas} src={clearBtn} alt="" width='40'/>
       
 
       <div>
