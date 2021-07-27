@@ -44,3 +44,7 @@ canvas {
 .tool-btn {
     margin: 10px;
 }
+
+.tool-btn:hover {
+    cursor: pointer;
+}
