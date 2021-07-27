@@ -1,6 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import setCanvasBrush from "../helpers/setCanvasBrush";
+import square from '../img/square.png';
+import triangle from '../img/triangle.png'
 
 let canvas;
 
@@ -44,13 +46,13 @@ export default function Draw() {
   const canvasEl = useRef();
   console.log({canvas: canvas})
   canvas && console.log({remove:canvas.remove})
-  const config = {
+   const config = {
     lineWidth,
     lineColor,
     shadowColor,
     shadowOffset,
     shadowWidth,
-  };
+  }; 
 
   // console.log({ canvasEl });
 
@@ -115,12 +117,13 @@ export default function Draw() {
 
   return (
     <div>
-      <button onClick={addRect}>Add Rectangle</button>
-      <button onClick={drawTriangleShape}>Add Triangle</button>
-      <button onClick={() => setDrawingMode(!drawingMode)}>
+      <button className='tool-btn' onClick={addRect}><img src={square} alt='rectangleTool' width='30' height='30' /></button>
+      <button className='tool-btn' onClick={drawTriangleShape}><img src={triangle} width='30' height='30' /></button>
+      <button className='tool-btn' onClick={() => setDrawingMode(!drawingMode)}>
         {drawingMode ? "Cancel drawing mode" : "Enter drawing mode"}
       </button>
-      <button onClick={clearCanvas}>Clear Canvas</button>
+      <button className='tool-btn' onClick={clearCanvas}>Clear Canvas</button>
+      
 
       <div>
         {drawingMode && (
@@ -207,8 +210,8 @@ function addRect() {
     left: 100,
     top: 100,
     fill: "blue",
-    width: 20,
-    height: 20,
+    width: 100,
+    height: 100,
     hasControls: true,
   });
   canvas.add(newRectangle);

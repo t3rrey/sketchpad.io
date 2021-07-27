@@ -7,7 +7,7 @@ export default function () {
     <div>
       <Draw />
       <h1> test </h1>
-      
+     
     </div>
   );
 }
