@@ -267,22 +267,4 @@ function drawTriangleShape() {
   canvas.centerObject(newTriangle);
 }
 
-function controls() {
-  return (
-    <div>
-      <div>
-        <label htmlFor="range1"></label>
-        <input id="range1" type="range" min="1" max="100" />
-      </div>
-      <div>
-        <input type="range" min="1" max="100" />
-      </div>
-      <div>
-        <input type="range" min="1" max="100" />
-      </div>
-      <div>
-        <input type="range" min="1" max="100" />
-      </div>
-    </div>
-  );
-}
+
