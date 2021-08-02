@@ -37,14 +37,35 @@
     }
 }
 
+.main Content {
+    position: relative;
+}
+
 canvas {
     border: 1px solid black;
 }
 
 .tool-btn {
     margin: 10px;
+    width: 60px;
+    z-index: 10;
 }
 
 .tool-btn:hover {
     cursor: pointer;
+}
+
+.main-tools-wrap {
+    display: flex;
+    flex-direction: column;
+    position: absolute;
+}
+
+.app-main {
+    display: flex;
+    flex-direction: column;
+}
+
+.logo {
+    margin: auto;
 }

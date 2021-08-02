@@ -1,18 +1,18 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import setCanvasBrush from "../helpers/setCanvasBrush";
-import circleBtn from '../img/circleButton.svg';
-import squareBtn from '../img/squareButton.svg';
-import triangleBtn from '../img/triangleButton.svg';
-import clearBtn from '../img/clearButton.svg';
-import drawToolBtn from '../img/drawToolButton.svg';
-
+import circleBtn from "../img/circleButton.svg";
+import squareBtn from "../img/squareButton.svg";
+import triangleBtn from "../img/triangleButton.svg";
+import clearBtn from "../img/clearButton.svg";
+import drawToolBtn from "../img/drawToolButton.svg";
+import Controls from "./Controls";
 
 let canvas;
 
 const getDimensions = () => ({
   height: 800,
-  width: window.innerWidth / 1.5,
+  width: window.innerWidth * 0.98,
 });
 
 const getCanvas = () => {
@@ -31,6 +31,8 @@ const setColor = (color) => {
 
 const setWidth = (width) => {
   const brush = canvas.freeDrawingBrush;
+  if (!brush) return;
+
   brush.width = parseInt(width);
   console.log({ width, pattern: brush.getPatternSrc });
 
@@ -46,20 +48,18 @@ export default function Draw() {
   const [shadowOffset, setShadowOffset] = useState(0);
   const [shadowWidth, setShadowWidth] = useState(0);
   const [drawingMode, setDrawingMode] = useState(false);
+  const [canvasController, setCanvasController] = useState();
 
   const canvasEl = useRef();
-  console.log({canvas: canvas})
-  canvas && console.log({remove:canvas.remove})
-   const config = {
+  const config = {
     lineWidth,
     lineColor,
     shadowColor,
     shadowOffset,
     shadowWidth,
-  }; 
+  };
 
-  // console.log({ canvasEl });
-
+  // On resize and delete shape events
   useEffect(() => {
     const onResize = () => {
       // console.log("Resize happened");
@@ -68,14 +68,14 @@ export default function Draw() {
     const onDelete = (event) => {
       if (event.key !== "Delete") return;
       const objects = canvas.getActiveObjects();
-      console.log({objects})
-      objects.forEach(object => canvas.remove(object));
+      console.log({ objects });
+      objects.forEach((object) => canvas.remove(object));
     };
 
     // On resize
     window.addEventListener("resize", onResize);
     // On keyup
-    document.addEventListener('keyup', onDelete);
+    document.addEventListener("keyup", onDelete);
 
     // On unmount, remove resize event
     return () => {
@@ -85,10 +85,9 @@ export default function Draw() {
   }, []);
 
   useEffect(() => {
-    //console.log({ canvasEl });
-
-    if (canvasEl.current && !canvas) {
+    if (canvasEl.current) {
       canvas = getCanvas();
+      setCanvasController(canvas);
     }
   }, [canvasEl]);
 
@@ -120,32 +119,66 @@ export default function Draw() {
   };
 
   return (
-    <div className='mainContent'>
-      <img className='tool-btn' onClick={() => setDrawingMode(!drawingMode)} src={drawToolBtn} alt="" width='40'/>
-      <img className='tool-btn' onClick={addRect} src={squareBtn} alt='rectangleTool' width='40' />
-      <img className='tool-btn' onClick={drawTriangleShape} src={triangleBtn} width='40' />
-      <img className='tool-btn' src={circleBtn} alt="" width='40'/>
-      <img className='tool-btn' onClick={clearCanvas} src={clearBtn} alt="" width='40'/>
-      
+    <div className="mainContent">
+      <Controls canvas={canvasController} />
+      <div className="main-tools-wrap">
+        <img
+          className="tool-btn"
+          onClick={() => setDrawingMode(!drawingMode)}
+          src={drawToolBtn}
+          alt=""
+          width="40"
+        />
+        <img
+          className="tool-btn"
+          onClick={addRect}
+          src={squareBtn}
+          alt="rectangleTool"
+          width="40"
+        />
+        <img
+          className="tool-btn"
+          onClick={drawTriangleShape}
+          src={triangleBtn}
+          width="40"
+        />
+        <img className="tool-btn" src={circleBtn} alt="" width="40" />
+        <img
+          className="tool-btn"
+          onClick={clearCanvas}
+          src={clearBtn}
+          alt=""
+          width="40"
+        />
+      </div>
 
       <div>
         {drawingMode && (
           <div id="drawing-mode-options">
             <label htmlFor="drawing-mode-selector">Mode:</label>
-            <select
-              id="drawing-mode-selector"
-              onChange={(event) => setCanvasBrush(canvas, event.target.value)}
+            <div
+              onClick={(event) => {
+                const brush = event.target.name;
+                console.log({ brush, canvas });
+                if (brush) {
+                  setCanvasBrush(canvas, brush);
+                }
+              }}
             >
-              <option>Pencil</option>
-              <option>Circle</option>
-              <option>Spray</option>
-              <option>Pattern</option>
-              <option>hline</option>
-              <option>vline</option>
-              <option>square</option>
-              <option>diamond</option>
-              <option>texture</option>
-            </select>
+              {[
+                "Pencil",
+                "Circle",
+                "Spray",
+                "Pattern",
+                "hline",
+                "vline",
+                "square",
+                "diamond",
+                "texture",
+              ].map((tool) => (
+                <img src={`./img/${tool}.png`} name={tool} title={tool} />
+              ))}
+            </div>
             <br />
             <label htmlFor="drawing-line-width">Line width:</label>
             <span className="info">{lineWidth}</span>
@@ -170,7 +203,7 @@ export default function Draw() {
             <input
               type="color"
               value={shadowColor}
-              onChange={event => setShadowColor(event.target.value)}
+              onChange={(event) => setShadowColor(event.target.value)}
               id="drawing-shadow-color"
             />
             <br />
@@ -234,4 +267,22 @@ function drawTriangleShape() {
   canvas.centerObject(newTriangle);
 }
 
-
+function controls() {
+  return (
+    <div>
+      <div>
+        <label htmlFor="range1"></label>
+        <input id="range1" type="range" min="1" max="100" />
+      </div>
+      <div>
+        <input type="range" min="1" max="100" />
+      </div>
+      <div>
+        <input type="range" min="1" max="100" />
+      </div>
+      <div>
+        <input type="range" min="1" max="100" />
+      </div>
+    </div>
+  );
+}

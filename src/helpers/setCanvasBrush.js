@@ -45,15 +45,15 @@ const setCanvasBrush = (canvas, brushName) => {
             return vLinePatternBrush;
         },
         square() {
-            var squarePatternBrush = new fabric.PatternBrush(canvas);
+            let squarePatternBrush = new fabric.PatternBrush(canvas);
             squarePatternBrush.getPatternSrc = function() {
-                var squareWidth = 10,
+                let squareWidth = 10,
                     squareDistance = 2;
 
-                var patternCanvas = fabric.document.createElement("canvas");
+                let patternCanvas = fabric.document.createElement("canvas");
                 patternCanvas.width = patternCanvas.height =
                     squareWidth + squareDistance;
-                var ctx = patternCanvas.getContext("2d");
+                let ctx = patternCanvas.getContext("2d");
 
                 ctx.fillStyle = this.color;
                 ctx.fillRect(0, 0, squareWidth, squareWidth);
@@ -63,6 +63,31 @@ const setCanvasBrush = (canvas, brushName) => {
 
             return squarePatternBrush;
         },
+        diamond() {
+            let diamondPatternBrush = new fabric.PatternBrush(canvas);
+            diamondPatternBrush.getPatternSrc = function() {
+
+                let squareWidth = 10,
+                    squareDistance = 5;
+                let patternCanvas = fabric.document.createElement('canvas');
+                let rect = new fabric.Rect({
+                    width: squareWidth,
+                    height: squareWidth,
+                    angle: 45,
+                    fill: this.color
+                });
+
+                let canvasWidth = rect.getBoundingRect().width;
+
+                patternCanvas.width = patternCanvas.height = canvasWidth + squareDistance;
+                rect.set({ left: canvasWidth / 2, top: canvasWidth / 2 });
+
+                let ctx = patternCanvas.getContext('2d');
+                rect.render(ctx);
+
+                return patternCanvas;
+            };
+        }
     }[brushName]();
 
     canvas.freeDrawingBrush = brush;
