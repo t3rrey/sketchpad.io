@@ -48,7 +48,6 @@ canvas {
 .tool-btn {
     margin: 10px;
     width: 60px;
-    z-index: 10;
 }
 
 .tool-btn:hover {
@@ -59,6 +58,7 @@ canvas {
     display: flex;
     flex-direction: column;
     position: absolute;
+    z-index: 10;
 }
 
 .app-main {
@@ -68,4 +68,56 @@ canvas {
 
 .logo {
     margin: auto;
+}
+
+.tools-list {
+    position: absolute;
+    width: 500px;
+    left: 80px;
+    top: 25px;
+}
+
+.tool {
+    width: 32px;
+    margin-right: 3px;
+    cursor: pointer;
+    animation: slideRight 1s;
+}
+
+.tool :nth-child(2) {}
+
+#drawing-mode-options {
+    position: absolute;
+    top: 70px;
+    right: 20px;
+    padding: 10px;
+    border: 1px solid #ccc;
+    z-index: 10;
+    background: white;
+    width: 300px;
+}
+
+#drawing-mode-options h5 {
+    margin: 0;
+    padding: 5px 0;
+}
+
+#drawing-mode-options .options-list:hover,
+#drawing-mode-options h5:hover+.options-list {
+    display: block;
+}
+
+#drawing-mode-options .options-list {
+    display: none;
+}
+
+@keyframes slideRight {
+    from {
+        opacity: 0;
+        transform: translateX(-15px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
 }

@@ -1,12 +1,22 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import setCanvasBrush from "../helpers/setCanvasBrush";
+import { drawTriangleShape } from "../helpers/canvas";
 import circleBtn from "../img/circleButton.svg";
 import squareBtn from "../img/squareButton.svg";
 import triangleBtn from "../img/triangleButton.svg";
 import clearBtn from "../img/clearButton.svg";
 import drawToolBtn from "../img/drawToolButton.svg";
 import Controls from "./Controls";
+
+import pencil from "../img/tool.pencil.svg";
+import spray from "../img/tool.spray.svg";
+
+const brushes = {
+  pencil,
+  spray,
+  hline: spray,
+};
 
 let canvas;
 
@@ -42,13 +52,16 @@ const setWidth = (width) => {
 };
 
 export default function Draw() {
+  // Options
   const [lineWidth, setLineWidth] = useState(10);
   const [lineColor, setLineColor] = useState("#000000");
   const [shadowColor, setShadowColor] = useState("#000000");
   const [shadowOffset, setShadowOffset] = useState(0);
   const [shadowWidth, setShadowWidth] = useState(0);
+
   const [drawingMode, setDrawingMode] = useState(false);
   const [canvasController, setCanvasController] = useState();
+  const [brush, setBrush] = useState();
 
   const canvasEl = useRef();
   const config = {
@@ -58,6 +71,8 @@ export default function Draw() {
     shadowOffset,
     shadowWidth,
   };
+
+  console.log({ brush });
 
   // On resize and delete shape events
   useEffect(() => {
@@ -95,7 +110,7 @@ export default function Draw() {
     if (canvas) canvas.isDrawingMode = drawingMode;
   }, [drawingMode]);
 
-  useEffect(() => {
+  const onBrushUpdate = () => {
     if (!canvas.freeDrawingBrush) return;
 
     const brush = canvas.freeDrawingBrush;
@@ -106,7 +121,13 @@ export default function Draw() {
       offsetY: shadowOffset,
       color: shadowColor,
     });
-  }, [shadowWidth, shadowOffset, shadowColor]);
+  };
+  useEffect(onBrushUpdate, [shadowWidth, shadowOffset, shadowColor]);
+  useEffect(() => {
+    setWidth(lineWidth);
+    setColor(lineColor);
+    onBrushUpdate();
+  }, [brush]);
 
   const handleChangeColor = (event) => {
     setLineColor(event.target.value);
@@ -118,17 +139,55 @@ export default function Draw() {
     setWidth(event.target.value);
   };
 
+  const brushClicked = (canvas, brush) => {
+    setCanvasBrush(canvas, brush);
+    setBrush(brush);
+  };
+
   return (
     <div className="mainContent">
       <Controls canvas={canvasController} />
       <div className="main-tools-wrap">
-        <img
-          className="tool-btn"
-          onClick={() => setDrawingMode(!drawingMode)}
-          src={drawToolBtn}
-          alt=""
-          width="40"
-        />
+        <div>
+          <img
+            className="tool-btn"
+            onClick={() => setDrawingMode(!drawingMode)}
+            src={(drawingMode && brushes[brush]) || drawToolBtn}
+            alt=""
+            width="40"
+          />
+          {drawingMode && (
+            <div
+              className="tools-list"
+              onClick={(event) => {
+                const brush = event.target.name;
+                console.log({ brush, canvas });
+                if (brush) {
+                  brushClicked(canvas, brush);
+                }
+              }}
+            >
+              {[
+                "Pencil",
+                "Circle",
+                "Spray",
+                "Pattern",
+                "hline",
+                "vline",
+                "square",
+                "diamond",
+                "texture",
+              ].map((tool) => (
+                <img
+                  src={brushes[tool.toLowerCase()] || brushes.pencil}
+                  name={tool}
+                  title={tool}
+                  className="tool"
+                />
+              ))}
+            </div>
+          )}
+        </div>
         <img
           className="tool-btn"
           onClick={addRect}
@@ -138,7 +197,7 @@ export default function Draw() {
         />
         <img
           className="tool-btn"
-          onClick={drawTriangleShape}
+          onClick={() => drawTriangleShape(canvas)}
           src={triangleBtn}
           width="40"
         />
@@ -155,80 +214,58 @@ export default function Draw() {
       <div>
         {drawingMode && (
           <div id="drawing-mode-options">
-            <label htmlFor="drawing-mode-selector">Mode:</label>
-            <div
-              onClick={(event) => {
-                const brush = event.target.name;
-                console.log({ brush, canvas });
-                if (brush) {
-                  setCanvasBrush(canvas, brush);
-                }
-              }}
-            >
-              {[
-                "Pencil",
-                "Circle",
-                "Spray",
-                "Pattern",
-                "hline",
-                "vline",
-                "square",
-                "diamond",
-                "texture",
-              ].map((tool) => (
-                <img src={`./img/${tool}.png`} name={tool} title={tool} />
-              ))}
+            <h5>Options</h5>
+            <div className="options-list">
+              <label htmlFor="drawing-line-width">Line width:</label>
+              <span className="info">{lineWidth}</span>
+              <input
+                type="range"
+                value={lineWidth}
+                onChange={handleChangeLineWidth}
+                min="1"
+                max="150"
+                id="drawing-line-width"
+              />
+              <br />
+              <label htmlFor="drawing-color">Line color:</label>
+              <input
+                type="color"
+                value={lineColor}
+                onChange={handleChangeColor}
+                id="drawing-color"
+              />
+              <br />
+              <label htmlFor="drawing-shadow-color">Shadow color:</label>
+              <input
+                type="color"
+                value={shadowColor}
+                onChange={(event) => setShadowColor(event.target.value)}
+                id="drawing-shadow-color"
+              />
+              <br />
+              <label htmlFor="drawing-shadow-width">Shadow width:</label>
+              <span className="info">{shadowWidth}</span>
+              <input
+                type="range"
+                value={shadowWidth}
+                onChange={(event) => setShadowWidth(+event.target.value)}
+                min="0"
+                max="50"
+                id="drawing-shadow-width"
+              />
+              <br />
+              <label htmlFor="drawing-shadow-offset">Shadow offset:</label>
+              <span className="info">{shadowOffset}</span>
+              <input
+                type="range"
+                value={shadowOffset}
+                onChange={(event) => setShadowOffset(+event.target.value)}
+                min="0"
+                max="50"
+                id="drawing-shadow-offset"
+              />
+              <br />
             </div>
-            <br />
-            <label htmlFor="drawing-line-width">Line width:</label>
-            <span className="info">{lineWidth}</span>
-            <input
-              type="range"
-              value={lineWidth}
-              onChange={handleChangeLineWidth}
-              min="1"
-              max="150"
-              id="drawing-line-width"
-            />
-            <br />
-            <label htmlFor="drawing-color">Line color:</label>
-            <input
-              type="color"
-              value={lineColor}
-              onChange={handleChangeColor}
-              id="drawing-color"
-            />
-            <br />
-            <label htmlFor="drawing-shadow-color">Shadow color:</label>
-            <input
-              type="color"
-              value={shadowColor}
-              onChange={(event) => setShadowColor(event.target.value)}
-              id="drawing-shadow-color"
-            />
-            <br />
-            <label htmlFor="drawing-shadow-width">Shadow width:</label>
-            <span className="info">{shadowWidth}</span>
-            <input
-              type="range"
-              value={shadowWidth}
-              onChange={(event) => setShadowWidth(+event.target.value)}
-              min="0"
-              max="50"
-              id="drawing-shadow-width"
-            />
-            <br />
-            <label htmlFor="drawing-shadow-offset">Shadow offset:</label>
-            <span className="info">{shadowOffset}</span>
-            <input
-              type="range"
-              value={shadowOffset}
-              onChange={(event) => setShadowOffset(+event.target.value)}
-              min="0"
-              max="50"
-              id="drawing-shadow-offset"
-            />
-            <br />
           </div>
         )}
       </div>
@@ -253,18 +290,3 @@ function addRect() {
   canvas.add(newRectangle);
   canvas.centerObject(newRectangle);
 }
-
-function drawTriangleShape() {
-  let newTriangle = new fabric.Triangle({
-    left: 100,
-    top: 100,
-    width: 100,
-    height: 100,
-    fill: "red",
-    hasControls: true,
-  });
-  canvas.add(newTriangle);
-  canvas.centerObject(newTriangle);
-}
-
-
