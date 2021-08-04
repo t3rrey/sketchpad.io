@@ -12,3 +12,16 @@ export function drawTriangleShape(canvas) {
     canvas.add(newTriangle);
     canvas.centerObject(newTriangle);
 }
+
+export function addRect(canvas) {
+    let newRectangle = new fabric.Rect({
+        left: 100,
+        top: 100,
+        fill: "blue",
+        width: 100,
+        height: 100,
+        hasControls: true,
+    });
+    canvas.add(newRectangle);
+    canvas.centerObject(newRectangle);
+}

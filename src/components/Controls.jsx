@@ -6,7 +6,6 @@ const Controls = ({ canvas }) => {
   // On select object event
   useEffect(() => {
     const onSelect = () => {
-      console.log(canvas);
       canvas && setSelectedObject(canvas.getActiveObjects()[0]);
     };
 

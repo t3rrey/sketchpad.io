@@ -1,12 +1,16 @@
 import React, { useState, useEffect, useRef } from "react";
 import { fabric } from "fabric";
 import setCanvasBrush from "../helpers/setCanvasBrush";
-import { drawTriangleShape } from "../helpers/canvas";
+import { drawTriangleShape, addRect } from "../helpers/canvas";
+
+import colorPicker from "../img/colorSelectorButton.svg";
 import circleBtn from "../img/circleButton.svg";
 import squareBtn from "../img/squareButton.svg";
 import triangleBtn from "../img/triangleButton.svg";
 import clearBtn from "../img/clearButton.svg";
 import drawToolBtn from "../img/drawToolButton.svg";
+
+import fill from "../helpers/fabric.fill";
 import Controls from "./Controls";
 
 import pencil from "../img/tool.pencil.svg";
@@ -19,6 +23,8 @@ const brushes = {
 };
 
 let canvas;
+let globalFillColor = "#000";
+let paint;
 
 const getDimensions = () => ({
   height: 800,
@@ -53,6 +59,8 @@ const setWidth = (width) => {
 
 export default function Draw() {
   // Options
+  const [fillColor, setFillColor] = useState(globalFillColor);
+  const [showColorPicker, setShowColorPicker] = useState(false);
   const [lineWidth, setLineWidth] = useState(10);
   const [lineColor, setLineColor] = useState("#000000");
   const [shadowColor, setShadowColor] = useState("#000000");
@@ -62,6 +70,7 @@ export default function Draw() {
   const [drawingMode, setDrawingMode] = useState(false);
   const [canvasController, setCanvasController] = useState();
   const [brush, setBrush] = useState();
+  const [selectedTool, setSelectedTool] = useState();
 
   const canvasEl = useRef();
   const config = {
@@ -103,6 +112,35 @@ export default function Draw() {
     if (canvasEl.current) {
       canvas = getCanvas();
       setCanvasController(canvas);
+      canvas.on({
+        "mouse:up": function (e) {
+          const objects = [];
+          canvas.forEachObject(function (object) {
+            console.log(object.selectable);
+            if (object.selectable) {
+              objects.push(object);
+            }
+          });
+          objects.reverse().forEach((object) => {
+            canvas.bringToFront(object);
+          });
+        },
+      });
+
+      canvas.on({
+        "mouse:down": function (e) {
+          const mouse = canvas.getPointer(e.e),
+            mouseX = Math.round(mouse.x),
+            mouseY = Math.round(mouse.y);
+          console.log({ paint });
+          if (!paint) return;
+          paint = false;
+          fill(canvas, [mouseX, mouseY], {
+            fillColor: globalFillColor,
+            fillTolerance: 2,
+          });
+        },
+      });
     }
   }, [canvasEl]);
 
@@ -146,6 +184,11 @@ export default function Draw() {
 
   return (
     <div className="mainContent">
+      <button
+        onClick={() => fill(canvas, [10, 10], { fillColor, fillTolerance: 2 })}
+      >
+        Fill
+      </button>
       <Controls canvas={canvasController} />
       <div className="main-tools-wrap">
         <div>
@@ -190,7 +233,7 @@ export default function Draw() {
         </div>
         <img
           className="tool-btn"
-          onClick={addRect}
+          onClick={() => addRect(canvas)}
           src={squareBtn}
           alt="rectangleTool"
           width="40"
@@ -209,6 +252,26 @@ export default function Draw() {
           alt=""
           width="40"
         />
+        <div>
+          <img
+            src={colorPicker}
+            onClick={() => setShowColorPicker(!showColorPicker)}
+            width="40"
+          />
+
+          {showColorPicker && (
+            <input
+              type="color"
+              value={fillColor}
+              className="color-value"
+              onChange={(event) => {
+                setFillColor(event.target.value);
+                globalFillColor = event.target.value;
+                paint = true;
+              }}
+            />
+          )}
+        </div>
       </div>
 
       <div>
@@ -276,17 +339,4 @@ export default function Draw() {
 
 function clearCanvas() {
   canvas.clear();
-}
-
-function addRect() {
-  let newRectangle = new fabric.Rect({
-    left: 100,
-    top: 100,
-    fill: "blue",
-    width: 100,
-    height: 100,
-    hasControls: true,
-  });
-  canvas.add(newRectangle);
-  canvas.centerObject(newRectangle);
 }
