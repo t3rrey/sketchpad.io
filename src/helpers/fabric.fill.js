@@ -1,8 +1,3 @@
-/*
- * FloodFill for fabric.js
- * @author Arjan Haverkamp (av01d)
- * @date October 2018
- */
 import { fabric } from "fabric";
 var FloodFill = {
     // Compare subsection of array1's values to array2's values, with an optional tolerance
@@ -18,7 +13,6 @@ var FloodFill = {
                 return false;
             }
         }
-
         return true;
     },
 
@@ -71,10 +65,10 @@ var FloodFill = {
             if (y > maxY) {
                 maxY = y;
             }
-            if (x < minX || minX == -1) {
+            if (x < minX || minX === -1) {
                 minX = x;
             }
-            if (y < minY || minY == -1) {
+            if (y < minY || minY === -1) {
                 minY = y;
             }
 
@@ -131,32 +125,10 @@ function hexToRgb(hex, opacity) {
     return rgb.concat(opacity);
 }
 
-/*export default (function() {
-    
-    if (!enable) {
-		fcanvas.off('mouse:down');
-		fcanvas.selection = true;
-		fcanvas.forEachObject(function(object){
-			object.selectable = true;
-		});
-		return;
-	}
-    
-	fcanvas.deactivateAll().renderAll(); // Hide object handles!
-	fcanvas.selection = false;
-	fcanvas.forEachObject(function(object){
-        object.selectable = false;
-	});
-})();*/
-
 export default function floodFill(fcanvas, [mouseX, mouseY], options) {
-    // var fillColor = "#f00";
-    // var fillTolerance = 2;
     const { fillColor, fillTolerance } = options;
     fcanvas.discardActiveObject().renderAll();
-    var // mouse = fcanvas.getPointer(e.e),
-    // mouseX = Math.round(mouse.x), mouseY = Math.round(mouse.y),
-        canvas = fcanvas.lowerCanvasEl,
+    var canvas = fcanvas.lowerCanvasEl,
         context = canvas.getContext("2d"),
         parsedColor = hexToRgb(fillColor),
         imageData = context.getImageData(0, 0, canvas.width, canvas.height),
@@ -183,13 +155,9 @@ export default function floodFill(fcanvas, [mouseX, mouseY], options) {
         imageData.height
     );
 
-    if (0 == data.width || 0 == data.height) {
+    if (0 === data.width || 0 === data.height) {
         return;
     }
-
-    // imageData.data = data.imageData;
-    // console.log(imageData);
-    // canvas.getContext("2d").putImageData(imageData, 0, 0);
 
     // Update Frabic canvas
     var tmpCanvas = document.createElement("canvas"),
@@ -214,26 +182,8 @@ export default function floodFill(fcanvas, [mouseX, mouseY], options) {
             top: data.y,
             selectable: false,
         });
-
         fcanvas.add(object);
-
-        /*fcanvas.on("object:selected", function(event) {
-                    console.log(object, event.target, object === event.target);
-
-                    var object = event.target;
-                    console.log("Selected");
-                    canvas.sendToBack(object);
-                    object.sendToBack();
-                });*/
     };
     img.src = tmpCanvas.toDataURL("image/png");
-
     return;
-    /*fcanvas.add(
-                    new fabric.Image(tmpCanvas, {
-                        left: data.x,
-                        top: data.y,
-                        selectable: false,
-                    })
-                );*/
 }
