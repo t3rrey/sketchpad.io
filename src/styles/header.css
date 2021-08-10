@@ -1,0 +1,37 @@
+.main-logo {
+  text-align: center;
+  font-family: teadove;
+  font-size: 100px;
+  padding: calc(50vh - 100px);
+  color: white;
+  margin: auto;
+}
+
+.main-header-wrapper {
+  background: linear-gradient(to bottom, #f3b167, #ec38bc, #7303c0);
+  height: 100vh;
+  position: relative;
+  width: 100%;
+}
+
+* {
+  padding: 0;
+  margin: 0;
+}
+
+.svg-test {
+  height: 100%;
+}
+
+.svg-wrap {
+  position: absolute;
+  bottom: -1px;
+  height: 300px;
+  width: 100%;
+  overflow: hidden;
+}
+
+@font-face {
+  font-family: teadove;
+  src: url(./teadove.otf) format("opentype");
+}

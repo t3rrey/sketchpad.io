@@ -1,13 +1,13 @@
 import React from "react";
-import Draw from "./components/Draw";
 import "./App.css";
-import logo from './img/skplogo.png';
+import Header from "./components/landing-site/Header";
+import InfoBox from "./components/landing-site/InfoBox";
 
-export default function () {
+export default function app() {
   return (
-    <div className='app-main'>
-      <img className='logo' src={logo} alt="logo" width='500' />
-      <Draw />
+    <div className="app-main">
+      <Header />
+      <InfoBox />
     </div>
   );
 }
