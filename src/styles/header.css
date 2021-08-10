@@ -2,7 +2,7 @@
   text-align: center;
   font-family: teadove;
   font-size: 100px;
-  padding: calc(50vh - 100px);
+  padding-top: calc(50vh - 100px);
   color: white;
   margin: auto;
 }
@@ -25,8 +25,7 @@
 
 .svg-wrap {
   position: absolute;
-  bottom: -1px;
-  height: 300px;
+  bottom: -5px;
   width: 100%;
   overflow: hidden;
 }
