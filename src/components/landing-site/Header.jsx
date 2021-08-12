@@ -5,6 +5,7 @@ import "../../styles/header.css";
 const header = () => {
   return (
     <div className="main-header-wrapper">
+      <button className="main-signin-button">Sign In</button>
       <h1 className="main-logo">sketchd.io</h1>
       <div className="svg-wrap">
         <svg

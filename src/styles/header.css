@@ -34,3 +34,17 @@
   font-family: teadove;
   src: url(./teadove.otf) format("opentype");
 }
+
+.main-signin-button {
+  background-color: #273036;
+  position: absolute;
+  top: 0;
+  right: 0;
+  margin: 30px;
+  border-radius: 25px;
+  color: white;
+  border: none;
+  padding: 20px;
+  font-size: 20px;
+  cursor: pointer;
+}

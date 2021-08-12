@@ -1,5 +1,22 @@
 .infobox-main-wrapper {
   width: 100%;
-  height: 500px;
+  height: 300px;
   background-color: #273036;
+}
+
+.main-infobox-1 {
+  height: 500px;
+  margin: auto;
+  display: flex;
+  flex-direction: row;
+}
+
+.info-child {
+  display: flex;
+  height: 600px;
+  width: 33.33%;
+  background-color: #273036;
+  border: 1px solid white;
+  margin: 20px;
+  border-radius: 15px;
 }
