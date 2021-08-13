@@ -58,28 +58,57 @@ const setWidth = (width) => {
 };
 
 const history = {
+  redolist: [],
+
   get() {
     return JSON.parse(localStorage.getItem("autosave")) || [];
   },
-  add(state) {
-    state = state || JSON.stringify(canvas);
-    const list = this.get();
-    list.push(state);
-    localStorage.setItem("autosave", JSON.stringify(list));
-    return list;
+  add(state, force) {
+    if (!force && this.frozen) return;
+
+    state = state || canvas;
+    const history = this.get();
+    history.push(state);
+    return this.saveHistory(history);
+  },
+  saveHistory(history) {
+    console.log("Saving history", history);
+    localStorage.setItem("autosave", JSON.stringify(history));
+    return history;
   },
   getCurrent() {
     return this.get().pop();
   },
-  recover() {
-    canvas.loadFromJSON(this.getCurrent());
+  recover(history) {
+    console.log("Recovering", history);
+    canvas.loadFromJSON(history || this.getCurrent());
   },
   undo() {
-    
-  }
+    this.freeze();
+    const newHistory = this.get();
+    this.redolist.push(newHistory.pop());
+    this.saveHistory(newHistory);
+    const last = newHistory.pop();
+    this.recover(last);
+    this.unfreeze();
+  },
+  redo() {
+    this.freeze();
+    const recovered = this.redolist.pop();
+    this.add(recovered, true);
+    this.recover(recovered);
+    this.unfreeze();
+  },
+  freeze() {
+    this.frozen = true;
+  },
+  unfreeze() {
+    setTimeout(() => (this.frozen = false));
+  },
 };
 
 function autosave(event) {
+  setTimeout(() => history.add());
 }
 
 export default function Draw() {
@@ -97,6 +126,14 @@ export default function Draw() {
   const [brush, setBrush] = useState();
   const [selectedTool, setSelectedTool] = useState();
 
+  const undo = () => {
+    history.undo();
+  };
+
+  const redo = () => {
+    history.redo();
+  };
+
   const canvasEl = useRef();
   const config = {
     lineWidth,
@@ -107,6 +144,10 @@ export default function Draw() {
   };
 
   console.log({ brush });
+
+  useEffect(() => {
+    // document.body.addEventListener("keyup", console.log);
+  }, []);
 
   // On resize and delete shape events
   useEffect(() => {
@@ -378,6 +419,8 @@ export default function Draw() {
       >
         Load
       </button>
+      <button onClick={undo}>Undo</button>
+      <button onClick={redo}>Re-do</button>
     </div>
   );
 }
