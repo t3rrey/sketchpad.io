@@ -1,11 +1,11 @@
 import React from "react";
+import Particles from "./components/landing-site/Particles";
 import "./App.css";
-import Draw from "./components/Draw";
 
 export default function app() {
   return (
     <div className="app-main">
-      <Draw />
+      <Particles />
     </div>
   );
 }
