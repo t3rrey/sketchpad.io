@@ -16,6 +16,9 @@ import Controls from "./Controls";
 import pencil from "../img/tool.pencil.svg";
 import spray from "../img/tool.spray.svg";
 
+import history from "../helpers/canvas.history";
+import download from "../helpers/canvas.tojpg";
+
 const brushes = {
   pencil,
   spray,
@@ -57,60 +60,6 @@ const setWidth = (width) => {
   }
 };
 
-const history = {
-  redolist: [],
-
-  get() {
-    return JSON.parse(localStorage.getItem("autosave")) || [];
-  },
-  add(state, force) {
-    if (!force && this.frozen) return;
-
-    state = state || canvas;
-    const history = this.get();
-    history.push(state);
-    return this.saveHistory(history);
-  },
-  saveHistory(history) {
-    console.log("Saving history", history);
-    localStorage.setItem("autosave", JSON.stringify(history));
-    return history;
-  },
-  getCurrent() {
-    return this.get().pop();
-  },
-  recover(history) {
-    console.log("Recovering", history);
-    canvas.loadFromJSON(history || this.getCurrent());
-  },
-  undo() {
-    this.freeze();
-    const newHistory = this.get();
-    this.redolist.push(newHistory.pop());
-    this.saveHistory(newHistory);
-    const last = newHistory.pop();
-    this.recover(last);
-    this.unfreeze();
-  },
-  redo() {
-    this.freeze();
-    const recovered = this.redolist.pop();
-    this.add(recovered, true);
-    this.recover(recovered);
-    this.unfreeze();
-  },
-  freeze() {
-    this.frozen = true;
-  },
-  unfreeze() {
-    setTimeout(() => (this.frozen = false));
-  },
-};
-
-function autosave(event) {
-  setTimeout(() => history.add());
-}
-
 export default function Draw() {
   // Options
   const [fillColor, setFillColor] = useState(globalFillColor);
@@ -146,7 +95,13 @@ export default function Draw() {
   console.log({ brush });
 
   useEffect(() => {
-    // document.body.addEventListener("keyup", console.log);
+    document.addEventListener("keypress", function (e) {
+      const zKey = 26;
+
+      if (e.ctrlKey && e.which === zKey) {
+        undo();
+      }
+    });
   }, []);
 
   // On resize and delete shape events
@@ -175,45 +130,41 @@ export default function Draw() {
   }, []);
 
   useEffect(() => {
-    if (canvasEl.current) {
-      canvas = getCanvas();
-      setCanvasController(canvas);
-      canvas.on({
-        "mouse:up": function (e) {
-          const objects = [];
-          canvas.forEachObject(function (object) {
-            console.log(object.selectable);
-            if (object.selectable) {
-              objects.push(object);
-            }
-          });
-          objects.reverse().forEach((object) => {
-            canvas.bringToFront(object);
-          });
-        },
-      });
+    if (!canvasEl.current) return;
+    canvas = getCanvas();
+    setCanvasController(canvas);
 
-      canvas.on({
-        "mouse:down": function (e) {
-          const mouse = canvas.getPointer(e.e),
-            mouseX = Math.round(mouse.x),
-            mouseY = Math.round(mouse.y);
-          console.log({ paint });
-          if (!paint) return;
-          paint = false;
-          fill(canvas, [mouseX, mouseY], {
-            fillColor: globalFillColor,
-            fillTolerance: 2,
-          });
-        },
-      });
+    history.init(canvas);
 
-      canvas.on({
-        "object:modified": autosave,
-        "object:added": autosave,
-        "object:removed": autosave,
-      });
-    }
+    canvas.on({
+      "mouse:up": function (e) {
+        const objects = [];
+        canvas.forEachObject(function (object) {
+          console.log(object.selectable);
+          if (object.selectable) {
+            objects.push(object);
+          }
+        });
+        objects.reverse().forEach((object) => {
+          canvas.bringToFront(object);
+        });
+      },
+    });
+
+    canvas.on({
+      "mouse:down": function (e) {
+        const mouse = canvas.getPointer(e.e),
+          mouseX = Math.round(mouse.x),
+          mouseY = Math.round(mouse.y);
+        console.log({ paint });
+        if (!paint) return;
+        paint = false;
+        fill(canvas, [mouseX, mouseY], {
+          fillColor: globalFillColor,
+          fillTolerance: 2,
+        });
+      },
+    });
   }, [canvasEl]);
 
   useEffect(() => {
@@ -298,6 +249,7 @@ export default function Draw() {
                   name={tool}
                   title={tool}
                   className="tool"
+                  alt="penTool"
                 />
               ))}
             </div>
@@ -326,6 +278,7 @@ export default function Draw() {
         />
         <div>
           <img
+            className="tool-btn"
             src={colorPicker}
             onClick={() => setShowColorPicker(!showColorPicker)}
             width="40"
@@ -419,6 +372,7 @@ export default function Draw() {
       >
         Load
       </button>
+      <button onClick={() => download(canvas)}>Download</button>
       <button onClick={undo}>Undo</button>
       <button onClick={redo}>Re-do</button>
     </div>
@@ -427,4 +381,5 @@ export default function Draw() {
 
 function clearCanvas() {
   canvas.clear();
+  history.onClear();
 }

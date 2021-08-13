@@ -1,11 +1,14 @@
 import React from "react";
 import logo from "../../img/slogo1.png";
 import "../../styles/header.css";
+import { Link } from "react-router-dom";
 
 const header = () => {
   return (
     <div className="main-header-wrapper">
-      <button className="main-signin-button">Sign In</button>
+      <Link to="/login">
+        <button className="main-signin-button">Sign In</button>
+      </Link>
       <h1 className="main-logo">sketchd.io</h1>
       <div className="svg-wrap">
         <svg

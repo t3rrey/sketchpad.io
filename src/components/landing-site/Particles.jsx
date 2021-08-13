@@ -1,6 +1,6 @@
 import Particles from "react-tsparticles";
 import React from "react";
-import particlesConfig, { alternativeParticles } from "./particle.config";
+import { alternativeParticles } from "./particle.config";
 
 function Particlesbackground() {
   return (
