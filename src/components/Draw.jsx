@@ -57,6 +57,31 @@ const setWidth = (width) => {
   }
 };
 
+const history = {
+  get() {
+    return JSON.parse(localStorage.getItem("autosave")) || [];
+  },
+  add(state) {
+    state = state || JSON.stringify(canvas);
+    const list = this.get();
+    list.push(state);
+    localStorage.setItem("autosave", JSON.stringify(list));
+    return list;
+  },
+  getCurrent() {
+    return this.get().pop();
+  },
+  recover() {
+    canvas.loadFromJSON(this.getCurrent());
+  },
+  undo() {
+    
+  }
+};
+
+function autosave(event) {
+}
+
 export default function Draw() {
   // Options
   const [fillColor, setFillColor] = useState(globalFillColor);
@@ -140,6 +165,12 @@ export default function Draw() {
             fillTolerance: 2,
           });
         },
+      });
+
+      canvas.on({
+        "object:modified": autosave,
+        "object:added": autosave,
+        "object:removed": autosave,
       });
     }
   }, [canvasEl]);
@@ -333,6 +364,20 @@ export default function Draw() {
         )}
       </div>
       <canvas ref={canvasEl} id="react-canvas"></canvas>
+      <button
+        onClick={() => {
+          const saved = JSON.stringify(canvas);
+          console.log(saved);
+          localStorage.setItem("canvas", saved);
+        }}
+      >
+        Save
+      </button>
+      <button
+        onClick={() => canvas.loadFromJSON(localStorage.getItem("canvas"))}
+      >
+        Load
+      </button>
     </div>
   );
 }
