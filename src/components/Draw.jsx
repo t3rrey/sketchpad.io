@@ -3,21 +3,24 @@ import { fabric } from "fabric";
 import setCanvasBrush from "../helpers/setCanvasBrush";
 import { drawTriangleShape, addRect } from "../helpers/canvas";
 
-import colorPicker from "../img/colorSelectorButton.svg";
-import circleBtn from "../img/circleButton.svg";
-import squareBtn from "../img/squareButton.svg";
-import triangleBtn from "../img/triangleButton.svg";
-import clearBtn from "../img/clearButton.svg";
-import drawToolBtn from "../img/drawToolButton.svg";
-
 import fill from "../helpers/fabric.fill";
 import Controls from "./Controls";
 
-import pencil from "../img/tool.pencil.svg";
-import spray from "../img/tool.spray.svg";
+import pencil from "../assets/tool.pencil.svg";
+import spray from "../assets/tool.spray.svg";
 
 import history from "../helpers/canvas.history";
 import download from "../helpers/canvas.tojpg";
+
+import bucketToolImg from "../assets/button-icons/bucket-tool.svg";
+import cirlceToolImg from "../assets/button-icons/circle-tool.svg";
+import clearToolImg from "../assets/button-icons/clear-tool.svg";
+import downloadToolImg from "../assets/button-icons/download-tool.svg";
+import penToolImg from "../assets/button-icons/pen-tool.svg";
+import rectToolImg from "../assets/button-icons/rect-tool.svg";
+import triangleToolImg from "../assets/button-icons/triangle-tool.svg";
+import undoToolImg from "../assets/button-icons/undo-tool.svg";
+import redoToolImg from "../assets/button-icons/redo-tool.svg";
 
 const brushes = {
   pencil,
@@ -207,18 +210,58 @@ export default function Draw() {
 
   return (
     <div className="mainContent">
-      <button
-        onClick={() => fill(canvas, [10, 10], { fillColor, fillTolerance: 2 })}
-      >
-        Fill
-      </button>
       <Controls canvas={canvasController} />
+      <div className="draw-sidetools-main">
+        <div className="tool-btn" id="pencil">
+          <img src={penToolImg} alt="" />
+        </div>
+        <div
+          className="tool-btn"
+          id="drawSquare"
+          onClick={() => addRect(canvas)}
+        >
+          <img src={rectToolImg} alt="" />
+        </div>
+        <div
+          className="tool-btn"
+          id="drawTriangle"
+          onClick={() => drawTriangleShape(canvas)}
+        >
+          <img src={triangleToolImg} alt="" />
+        </div>
+        <div className="tool-btn" id="drawCircle">
+          <img src={cirlceToolImg} alt="" />
+        </div>
+        <div
+          className="tool-btn"
+          id="fillBucket"
+          onClick={() => setShowColorPicker(!showColorPicker)}
+        >
+          <img src={bucketToolImg} alt="" />
+        </div>
+        <div className="tool-btn" id="clearCanvas" onClick={clearCanvas}>
+          <img src={clearToolImg} alt="" />
+        </div>
+        <div className="tool-btn" id="undoAction" onClick={undo}>
+          <img src={undoToolImg} alt="" />
+        </div>
+        <div className="tool-btn" id="redoAction" onClick={redo}>
+          <img src={redoToolImg} alt="" />
+        </div>
+        <div
+          className="tool-btn"
+          id="downloadCanvas"
+          onClick={() => download(canvas)}
+        >
+          <img src={downloadToolImg} alt="" />
+        </div>
+      </div>
       <div className="main-tools-wrap">
         <div>
           <img
             className="tool-btn"
             onClick={() => setDrawingMode(!drawingMode)}
-            src={(drawingMode && brushes[brush]) || drawToolBtn}
+            src={drawingMode && brushes[brush]}
             alt=""
             width="40"
           />
@@ -258,30 +301,32 @@ export default function Draw() {
         <img
           className="tool-btn"
           onClick={() => addRect(canvas)}
-          src={squareBtn}
+          src=""
           alt="rectangleTool"
           width="40"
         />
         <img
           className="tool-btn"
           onClick={() => drawTriangleShape(canvas)}
-          src={triangleBtn}
+          src=""
           width="40"
+          alt=""
         />
-        <img className="tool-btn" src={circleBtn} alt="" width="40" />
+        <img className="tool-btn" src="" alt="" width="40" />
         <img
           className="tool-btn"
           onClick={clearCanvas}
-          src={clearBtn}
+          src=""
           alt=""
           width="40"
         />
         <div>
           <img
             className="tool-btn"
-            src={colorPicker}
+            src=""
             onClick={() => setShowColorPicker(!showColorPicker)}
             width="40"
+            alt=""
           />
 
           {showColorPicker && (
@@ -358,23 +403,6 @@ export default function Draw() {
         )}
       </div>
       <canvas ref={canvasEl} id="react-canvas"></canvas>
-      <button
-        onClick={() => {
-          const saved = JSON.stringify(canvas);
-          console.log(saved);
-          localStorage.setItem("canvas", saved);
-        }}
-      >
-        Save
-      </button>
-      <button
-        onClick={() => canvas.loadFromJSON(localStorage.getItem("canvas"))}
-      >
-        Load
-      </button>
-      <button onClick={() => download(canvas)}>Download</button>
-      <button onClick={undo}>Undo</button>
-      <button onClick={redo}>Re-do</button>
     </div>
   );
 }
