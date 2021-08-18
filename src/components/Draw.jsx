@@ -33,8 +33,8 @@ let globalFillColor = "#000";
 let paint;
 
 const getDimensions = () => ({
-  height: 800,
-  width: window.innerWidth * 0.98,
+  height: 1000,
+  width: window.innerWidth - 62,
 });
 
 const getCanvas = () => {
@@ -187,6 +187,7 @@ export default function Draw() {
     });
   };
   useEffect(onBrushUpdate, [shadowWidth, shadowOffset, shadowColor]);
+
   useEffect(() => {
     setWidth(lineWidth);
     setColor(lineColor);
@@ -211,6 +212,7 @@ export default function Draw() {
   return (
     <div className="mainContent">
       <Controls canvas={canvasController} />
+      <div className="main-options"></div>
       <div className="draw-sidetools-main">
         <div className="tool-btn" id="pencil">
           <img src={penToolImg} alt="" />
@@ -298,37 +300,7 @@ export default function Draw() {
             </div>
           )}
         </div>
-        <img
-          className="tool-btn"
-          onClick={() => addRect(canvas)}
-          src=""
-          alt="rectangleTool"
-          width="40"
-        />
-        <img
-          className="tool-btn"
-          onClick={() => drawTriangleShape(canvas)}
-          src=""
-          width="40"
-          alt=""
-        />
-        <img className="tool-btn" src="" alt="" width="40" />
-        <img
-          className="tool-btn"
-          onClick={clearCanvas}
-          src=""
-          alt=""
-          width="40"
-        />
         <div>
-          <img
-            className="tool-btn"
-            src=""
-            onClick={() => setShowColorPicker(!showColorPicker)}
-            width="40"
-            alt=""
-          />
-
           {showColorPicker && (
             <input
               type="color"

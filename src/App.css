@@ -144,3 +144,23 @@ canvas {
   display: block;
   margin-bottom: 5px;
 }
+
+.mainContent {
+  display: flex;
+  flex-direction: row;
+}
+
+.tool-btn {
+  width: 40px;
+}
+
+path {
+  fill: white;
+}
+
+.draw-sidetools-main {
+  background: #273036;
+}
+
+.main-options {
+}
