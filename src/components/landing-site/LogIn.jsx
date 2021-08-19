@@ -2,8 +2,10 @@ import React from "react";
 import { useState } from "react";
 import "../../App.css";
 import Particles from "../../components/landing-site/Particles";
+import { useHistory, Link } from "react-router-dom";
 
 function LogIn() {
+  const history = useHistory();
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
 
@@ -39,7 +41,12 @@ function LogIn() {
     <div className="login-container-main">
       <div className="lc">
         <form className="login-form" action="submit" onSubmit={handleLogin}>
-          <h1 className="lf-main-heading">sketchd</h1>
+          {/* <Link component="h1" to={"/"} className="lf-main-heading">
+            sketchd
+          </Link> */}
+          <h1 onClick={() => history.push("/")} className="lf-main-heading">
+            sketchd
+          </h1>
           <h2 className="lf-main-subHeading">SIGN IN</h2>
           <input
             className="login-input-main"

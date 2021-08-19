@@ -1,7 +1,10 @@
 import React from "react";
 import Particles from "react-tsparticles";
 import { config } from "../helpers/ptest.config";
-const tp = () => {
+import "pathseg";
+
+const TP = () => {
+  console.log({ config });
   return (
     <div>
       <Particles options={config} />
@@ -9,4 +12,4 @@ const tp = () => {
   );
 };
 
-export default tp;
+export default TP;

@@ -1,125 +1,127 @@
+import smalldeer from "../assets/penTest.svg";
 export const config = {
-  background: {
-    color: {
-      value: "#000000",
-    },
-    position: "50% 50%",
-    repeat: "no-repeat",
-    size: "cover",
-  },
-  fullScreen: {
-    enable: true,
-    zIndex: 1,
-  },
-  detectRetina: false,
-  fpsLimit: 30,
-  interactivity: {
-    events: {
-      onClick: {
-        mode: "push",
-      },
-      onDiv: {
-        selectors: "#repulse-div",
-        mode: "repulse",
-      },
-      onHover: {
-        enable: true,
-        mode: "bubble",
-      },
-    },
-    modes: {
-      bubble: {
-        distance: 40,
-        duration: 2,
-        opacity: 8,
-        size: 6,
-      },
-      grab: {
-        distance: 400,
-      },
-      slow: {
-        factor: 1,
-        radius: 0,
-      },
-    },
-  },
-  particles: {
-    color: {
-      value: "#ffffff",
-    },
-    links: {
-      color: {
-        value: "#ffffff",
-      },
-      distance: 30,
-      enable: true,
-      opacity: 0.4,
-    },
-    move: {
-      attract: {
-        rotate: {
-          x: 600,
-          y: 1200,
-        },
-      },
-      enable: true,
-      outModes: {
-        default: "bounce",
-        bottom: "bounce",
-        left: "bounce",
-        right: "bounce",
-        top: "bounce",
-      },
-      speed: 1,
-    },
-    number: {
-      density: {
-        area: 2000,
-      },
-      value: 200,
-    },
-    opacity: {
-      value: {
-        min: 0.05,
-        max: 0.4,
-      },
-      animation: {
-        enable: true,
-        minimumValue: 0.05,
-      },
-    },
-    size: {
-      random: {
-        enable: true,
-      },
-      value: 1,
-      animation: {
-        speed: 40,
-        minimumValue: 0.1,
-      },
-    },
-  },
-  polygon: {
-    draw: {
-      enable: true,
-      stroke: {
+    autoPlay: true,
+    background: {
         color: {
-          value: "rgba(255,255,255,0.2)",
+            value: "#000000",
         },
-        width: 0.5,
-        opacity: 0.2,
-      },
+        position: "50% 50%",
+        repeat: "no-repeat",
+        size: "cover",
     },
-    enable: true,
-    inline: {
-      arrangement: "equidistant",
+    fullScreen: {
+        enable: true,
+        zIndex: 1,
     },
-    move: {
-      radius: 10,
-      type: "path",
+    detectRetina: false,
+    fpsLimit: 30,
+    interactivity: {
+        events: {
+            onClick: {
+                mode: "push",
+            },
+            onDiv: {
+                selectors: "#repulse-div",
+                mode: "repulse",
+            },
+            onHover: {
+                enable: true,
+                mode: "bubble",
+            },
+        },
+        modes: {
+            bubble: {
+                distance: 40,
+                duration: 2,
+                opacity: 8,
+                size: 6,
+            },
+            grab: {
+                distance: 400,
+            },
+            slow: {
+                factor: 1,
+                radius: 0,
+            },
+        },
     },
-    scale: 0.5,
-    type: "inline",
-    url: "https://particles.js.org/images/smalldeer.svg",
-  },
+    particles: {
+        color: {
+            value: "#ffffff",
+        },
+        links: {
+            color: {
+                value: "#ffffff",
+            },
+            distance: 30,
+            enable: true,
+            opacity: 0.4,
+        },
+        move: {
+            attract: {
+                rotate: {
+                    x: 600,
+                    y: 1200,
+                },
+            },
+            enable: true,
+            outModes: {
+                default: "bounce",
+                bottom: "bounce",
+                left: "bounce",
+                right: "bounce",
+                top: "bounce",
+            },
+            speed: 1,
+        },
+        number: {
+            density: {
+                area: 2000,
+            },
+            value: 200,
+        },
+        opacity: {
+            value: {
+                min: 0.05,
+                max: 0.4,
+            },
+            animation: {
+                enable: true,
+                minimumValue: 0.05,
+            },
+        },
+        size: {
+            random: {
+                enable: true,
+            },
+            value: 1,
+            animation: {
+                speed: 40,
+                minimumValue: 0.1,
+            },
+        },
+    },
+    polygon: {
+        draw: {
+            enable: true,
+            stroke: {
+                color: {
+                    value: "rgba(255,255,255,0.2)",
+                },
+                width: 0.5,
+                opacity: 0.2,
+            },
+        },
+        enable: true,
+        inline: {
+            arrangement: "equidistant",
+        },
+        move: {
+            radius: 10,
+            type: "path",
+        },
+        scale: 0.5,
+        type: "inline",
+        url: smalldeer,
+    },
 };

@@ -8,26 +8,38 @@ import Header from "./components/landing-site/Header";
 import InfoBox from "./components/landing-site/InfoBox";
 import Tp from "./components/Tp";
 
-export default function app() {
-  return (
-    <Router>
-      <Switch>
-        <div className="app-main">
-          <Route exact path="/">
-            <Header />
-            <InfoBox />
-          </Route>
-          <Route path="/login">
-            <LogIn />
-          </Route>
-          <Route path="/app">
-            <Draw />
-          </Route>
-          <Route path="/tp">
-            <Tp />
-          </Route>
-        </div>
-      </Switch>
-    </Router>
-  );
+export default function App() {
+    return ( <
+        Router >
+        <
+        Switch >
+        <
+        div className = "app-main" >
+        <
+        Route exact path = "/" >
+        <
+        Header / >
+        <
+        InfoBox / >
+        <
+        /Route> <
+        Route path = "/login" >
+        <
+        LogIn / >
+        <
+        /Route> <
+        Route path = "/app" >
+        <
+        Draw / >
+        <
+        /Route> <
+        Route path = "/tp" >
+        <
+        Tp / >
+        <
+        /Route> <
+        /div> <
+        /Switch> <
+        /Router>
+    );
 }

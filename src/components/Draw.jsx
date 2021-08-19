@@ -87,13 +87,6 @@ export default function Draw() {
   };
 
   const canvasEl = useRef();
-  const config = {
-    lineWidth,
-    lineColor,
-    shadowColor,
-    shadowOffset,
-    shadowWidth,
-  };
 
   console.log({ brush });
 
@@ -160,12 +153,14 @@ export default function Draw() {
           mouseX = Math.round(mouse.x),
           mouseY = Math.round(mouse.y);
         console.log({ paint });
-        if (!paint) return;
-        paint = false;
-        fill(canvas, [mouseX, mouseY], {
-          fillColor: globalFillColor,
-          fillTolerance: 2,
-        });
+
+        if (paint) {
+          paint = false;
+          fill(canvas, [mouseX, mouseY], {
+            fillColor: globalFillColor,
+            fillTolerance: 2,
+          });
+        }
       },
     });
   }, [canvasEl]);
@@ -214,6 +209,57 @@ export default function Draw() {
       <div className="main-options"></div>
       <div className="options">
         <Controls canvas={canvasController} />
+        {drawingMode && (
+          <div id="drawing-mode-options">
+            <h5>Options</h5>
+            <div className="options-list">
+              <label htmlFor="drawing-line-width">Line width:</label>
+              <span className="info">{lineWidth}</span>
+              <input
+                type="range"
+                value={lineWidth}
+                onChange={handleChangeLineWidth}
+                min="1"
+                max="150"
+                id="drawing-line-width"
+              />
+              <label htmlFor="drawing-color">Line color:</label>
+              <input
+                type="color"
+                value={lineColor}
+                onChange={handleChangeColor}
+                id="drawing-color"
+              />
+              <label htmlFor="drawing-shadow-color">Shadow color:</label>
+              <input
+                type="color"
+                value={shadowColor}
+                onChange={(event) => setShadowColor(event.target.value)}
+                id="drawing-shadow-color"
+              />
+              <label htmlFor="drawing-shadow-width">Shadow width:</label>
+              <span className="info">{shadowWidth}</span>
+              <input
+                type="range"
+                value={shadowWidth}
+                onChange={(event) => setShadowWidth(+event.target.value)}
+                min="0"
+                max="50"
+                id="drawing-shadow-width"
+              />
+              <label htmlFor="drawing-shadow-offset">Shadow offset:</label>
+              <span className="info">{shadowOffset}</span>
+              <input
+                type="range"
+                value={shadowOffset}
+                onChange={(event) => setShadowOffset(+event.target.value)}
+                min="0"
+                max="50"
+                id="drawing-shadow-offset"
+              />
+            </div>
+          </div>
+        )}
       </div>
       <div className="main-tools-wrap">
         <div>
@@ -257,24 +303,14 @@ export default function Draw() {
             </div>
           )}
         </div>
-        <div>
-          {showColorPicker && (
-            <input
-              type="color"
-              value={fillColor}
-              className="color-value"
-              onChange={(event) => {
-                setFillColor(event.target.value);
-                globalFillColor = event.target.value;
-                paint = true;
-              }}
-            />
-          )}
-        </div>
       </div>
       <div className="con-wrap">
         <div className="draw-sidetools-main">
-          <div className="tool-btn" id="pencil">
+          <div
+            className="tool-btn"
+            id="pencil"
+            onClick={() => setDrawingMode(!drawingMode)}
+          >
             <img src={penToolImg} alt="" />
           </div>
           <div
@@ -303,6 +339,20 @@ export default function Draw() {
             onClick={() => setShowColorPicker(!showColorPicker)}
           >
             <img src={bucketToolImg} alt="" />
+            {showColorPicker && (
+              <input
+                type="color"
+                value={fillColor}
+                className="color-value"
+                onClick={(event) => event.stopPropagation()}
+                onChange={(event) => {
+                  setFillColor(event.target.value);
+                  globalFillColor = event.target.value;
+                  paint = true;
+                  // setShowColorPicker(false);
+                }}
+              />
+            )}
           </div>
           <div
             title="Clear Canvas"
@@ -327,64 +377,6 @@ export default function Draw() {
           </div>
         </div>
         <canvas ref={canvasEl} id="react-canvas"></canvas>
-      </div>
-      <div>
-        {drawingMode && (
-          <div id="drawing-mode-options">
-            <h5>Options</h5>
-            <div className="options-list">
-              <label htmlFor="drawing-line-width">Line width:</label>
-              <span className="info">{lineWidth}</span>
-              <input
-                type="range"
-                value={lineWidth}
-                onChange={handleChangeLineWidth}
-                min="1"
-                max="150"
-                id="drawing-line-width"
-              />
-              <br />
-              <label htmlFor="drawing-color">Line color:</label>
-              <input
-                type="color"
-                value={lineColor}
-                onChange={handleChangeColor}
-                id="drawing-color"
-              />
-              <br />
-              <label htmlFor="drawing-shadow-color">Shadow color:</label>
-              <input
-                type="color"
-                value={shadowColor}
-                onChange={(event) => setShadowColor(event.target.value)}
-                id="drawing-shadow-color"
-              />
-              <br />
-              <label htmlFor="drawing-shadow-width">Shadow width:</label>
-              <span className="info">{shadowWidth}</span>
-              <input
-                type="range"
-                value={shadowWidth}
-                onChange={(event) => setShadowWidth(+event.target.value)}
-                min="0"
-                max="50"
-                id="drawing-shadow-width"
-              />
-              <br />
-              <label htmlFor="drawing-shadow-offset">Shadow offset:</label>
-              <span className="info">{shadowOffset}</span>
-              <input
-                type="range"
-                value={shadowOffset}
-                onChange={(event) => setShadowOffset(+event.target.value)}
-                min="0"
-                max="50"
-                id="drawing-shadow-offset"
-              />
-              <br />
-            </div>
-          </div>
-        )}
       </div>
     </div>
   );
