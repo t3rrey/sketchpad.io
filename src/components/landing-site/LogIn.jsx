@@ -41,9 +41,6 @@ function LogIn() {
     <div className="login-container-main">
       <div className="lc">
         <form className="login-form" action="submit" onSubmit={handleLogin}>
-          {/* <Link component="h1" to={"/"} className="lf-main-heading">
-            sketchd
-          </Link> */}
           <h1 onClick={() => history.push("/")} className="lf-main-heading">
             sketchd
           </h1>
