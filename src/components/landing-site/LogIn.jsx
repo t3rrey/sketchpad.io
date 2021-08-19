@@ -1,6 +1,7 @@
 import React from "react";
 import { useState } from "react";
-
+import "../../App.css";
+import Particles from "../../components/landing-site/Particles";
 
 function LogIn() {
   const [password, setPassword] = useState("");
@@ -35,11 +36,31 @@ function LogIn() {
   };
 
   return (
-    <form className="login-form" action="submit" onSubmit={handleLogin}>
-      <input type="email" value={email} onChange={handleChangeEmail} />
-      <input type="password" value={password} onChange={handleChangePassword} />
-      <input type="submit" />
-    </form>
+    <div className="login-container-main">
+      <div className="lc">
+        <form className="login-form" action="submit" onSubmit={handleLogin}>
+          <h1 className="lf-main-heading">sketchd</h1>
+          <h2 className="lf-main-subHeading">SIGN IN</h2>
+          <input
+            className="login-input-main"
+            type="email"
+            placeholder="email"
+            value={email}
+            onChange={handleChangeEmail}
+          />
+          <input
+            className="login-input-main"
+            type="password"
+            placeholder="password"
+            value={password}
+            onChange={handleChangePassword}
+          />
+          <input type="submit" />
+        </form>
+      </div>
+
+      <Particles />
+    </div>
   );
 }
 
