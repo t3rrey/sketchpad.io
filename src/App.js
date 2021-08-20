@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 import Draw from "./components/Draw";
 import Header from "./components/landing-site/Header";
 import InfoBox from "./components/landing-site/InfoBox";
-import Tp from "./components/Tp";
+import SquareParticles from "./components/SquareParticles";
 
 export default function App() {
   return (
@@ -19,7 +19,7 @@ export default function App() {
           <Route path="/login" component={LogIn}></Route>
           <Route path="/app" component={Draw}></Route>
           <Route path="/tp">
-            <Tp />
+            <SquareParticles />
           </Route>
         </div>
       </Switch>

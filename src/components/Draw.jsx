@@ -33,7 +33,7 @@ let globalFillColor = "#000";
 let paint;
 
 const getDimensions = () => ({
-  height: 1000,
+  height: window.innerHeight - 62,
   width: window.innerWidth - 62,
 });
 

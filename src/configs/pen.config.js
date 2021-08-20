@@ -1,9 +1,7 @@
-import smalldeer from "../assets/penTest.svg";
+import svgShape from "../assets/penTest.svg";
 export const config = {
   autoPlay: true,
-  size: "70%",
-  detectRetina: false,
-  fpsLimit: 30,
+  fpsLimit: 60,
   particles: {
     color: {
       value: "#ffffff",
@@ -31,7 +29,7 @@ export const config = {
         right: "bounce",
         top: "bounce",
       },
-      speed: 1,
+      speed: 0.5,
     },
     number: {
       density: {
@@ -65,22 +63,23 @@ export const config = {
       enable: true,
       stroke: {
         color: {
-          value: "#ffffff",
+          value: "none",
         },
         width: 0.5,
-        opacity: 0.2,
+        opacity: 1,
       },
     },
+    position: { x: 50, y: 50 },
     enable: true,
     inline: {
       arrangement: "equidistant",
     },
     move: {
-      radius: 10,
+      radius: 5,
       type: "path",
     },
     scale: 0.5,
     type: "inline",
-    url: smalldeer,
+    url: svgShape,
   },
 };

@@ -1,7 +1,7 @@
 import React from "react";
 import { useState } from "react";
 import "../../styles/App.css";
-import Particles from "../../components/landing-site/Particles";
+import Particles from "./ParticlesBackground";
 import { useHistory } from "react-router-dom";
 
 function LogIn() {
