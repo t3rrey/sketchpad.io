@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import "../App.css";
+import "../styles/App.css";
 
 const Controls = ({ canvas }) => {
   const [selectedObject, setSelectedObject] = useState();

@@ -1,8 +1,8 @@
 import React from "react";
 import { useState } from "react";
-import "../../App.css";
+import "../../styles/App.css";
 import Particles from "../../components/landing-site/Particles";
-import { useHistory, Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 
 function LogIn() {
   const history = useHistory();
