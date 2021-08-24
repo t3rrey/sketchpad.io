@@ -3,7 +3,6 @@ import "../../styles/infobox.css";
 import CloudParticles from "../CloudParticles";
 import TP from "../PenParticles";
 import SquareIcon from "../SquareParticles";
-
 function InfoBox() {
   return (
     <div className="infobox-main-wrapper">
