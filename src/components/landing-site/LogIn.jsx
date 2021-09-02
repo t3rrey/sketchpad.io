@@ -24,6 +24,7 @@ function LogIn() {
       .then((res) => res.json())
       .then((res) => {
         console.log(res);
+        window.localStorage.setItem("sessionToken", res.access_token);
       })
       .catch((err) => console.error(err));
   };
@@ -47,7 +48,7 @@ function LogIn() {
           <h2 className="lf-main-subHeading">SIGN IN</h2>
           <input
             className="login-input-main"
-            type="email"
+            type="text"
             placeholder="email"
             value={email}
             onChange={handleChangeEmail}
