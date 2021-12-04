@@ -63,7 +63,7 @@ export const config = {
       enable: true,
       stroke: {
         color: {
-          value: "none",
+          value: "ffffff",
         },
         width: 0.5,
         opacity: 1,
