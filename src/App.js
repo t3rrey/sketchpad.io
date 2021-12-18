@@ -9,19 +9,5 @@ import ProtectedRoute from "./components/ProtectedRoute";
 import Dashboard from "./components/Dashboard";
 
 export default function App() {
-  return (
-    <Router>
-      <Switch>
-        <div className="app-main">
-          <Route exact path="/">
-            <Header />
-            <InfoBox />
-          </Route>
-          <Route path="/login" component={LogIn}></Route>
-          <Route path="/app" component={Draw}></Route>
-          <ProtectedRoute path="/dashboard" component={Dashboard} />
-        </div>
-      </Switch>
-    </Router>
-  );
+  return <Draw />;
 }
